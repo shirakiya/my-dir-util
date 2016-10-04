@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import argparse
+import os
+import shutil
+from lib.validation import validate_dir
+
+
+def find_files_recursively(dir):
+    '''
+    指定されたパスに対して、その内部にあるファイルを再帰的に返す
+    '''
+    for root, dirs, files in os.walk(dir):
+        for file in files:
+            yield os.path.join(root, file)
+
+
+def mv_one_level(input_dir, output_dir):
+    exists_files = []
+
+    for filepath in find_files_recursively(input_dir):
+        filename = os.path.basename(filepath)
+        if os.path.exists(os.path.join(output_dir, filename)):
+            exists_files.append(filepath)
+            continue
+
+        shutil.move(filepath, output_dir)
+
+        message = '{0} ===> {1}'.format(filepath, os.path.join(output_dir, os.path.basename(filepath)))
+        print(message)
+
+    print('Already exists files shown below\n')
+    print('\n'.join(exists_files))
+
+
+if __name__ == '__main__':
+    '''
+    inputで指定されたディレクトリから再帰的にファイルを見つけ,
+    それらをoutputのディレクトリにmvする.
+    (複雑なディレクトリ構造を持つ状態から1階層にする)
+    '''
+    parser = argparse.ArgumentParser(description='move files to one level in target directory recursively')
+    parser.add_argument('-i', '--input-dir', type=str, required=True,
+                        help='input directory path')
+    parser.add_argument('-o', '--output-dir', type=str, required=True,
+                        help='output directory path')
+    args = parser.parse_args()
+    input_dir = args.input_dir
+    output_dir = args.output_dir
+
+    if not validate_dir(input_dir):
+        raise Exception('"input_dir" is not valid directory')
+    if not validate_dir(output_dir):
+        raise Exception('"output_dir" is not valid directory')
+
+    mv_one_level(input_dir, output_dir)

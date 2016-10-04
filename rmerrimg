@@ -1,0 +1,48 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import argparse
+import os
+from glob import glob
+from lib.validation import validate_dir, validate_empty_image
+
+EXTENSIONS = [
+    'jpg',
+    'jpeg',
+    'png',
+]
+
+
+def get_image_path(dir):
+    files = []
+    for ext in EXTENSIONS:
+        files.extend([f for f in glob(os.path.join(dir, '*.{}'.format(ext)))])
+    return files
+
+
+def rm_broken_image(dir):
+    import shutil
+    i = 0
+    for file in get_image_path(dir):
+        if not validate_empty_image(file):
+            os.remove(file)
+            i += 1
+
+    if i > 0:
+        print('{:d} images removed.'.format(i))
+    else:
+        print('no images removed.')
+
+
+if __name__ == '__main__':
+    '''
+    指定されたディレクトリ直下のファイルに対し,
+    不正な画像ファイル(.jpg, .png)であれば削除する
+    '''
+    parser = argparse.ArgumentParser(description='remove broken image file')
+    parser.add_argument('dir', type=str, help='target directory')
+    args = parser.parse_args()
+
+    if not validate_dir(args.dir):
+        raise Exception('argument is not valid directory')
+
+    rm_broken_image(args.dir)
