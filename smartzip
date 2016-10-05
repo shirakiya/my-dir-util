@@ -1,0 +1,46 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+import argparse
+import os
+from glob import glob
+import zipfile
+from lib.validation import validate_dir
+
+MAX_UNIT = 20000
+
+
+def _chunk(iterable, n):
+    return [iterable[x:x+n] for x in range(0, len(iterable), n)]
+
+
+def smartzip(src, dest, filename, max_unit):
+    files = [f for f in glob(os.path.join(src, '*'))]
+
+    index = 0
+    for chunk_files in _chunk(files, max_unit):
+        zipfilename = '{0}_{1}.zip'.format(filename, index)
+        zipfilepath = os.path.join(dest, zipfilename)
+        with zipfile.ZipFile(zipfilepath, 'w', zipfile.ZIP_DEFLATED) as zf:
+            for filepath in chunk_files:
+                zf.write(filepath, os.path.basename(filepath))
+        index += 1
+        print('create: {}'.format(zipfilepath))
+
+    print('finished!')
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description='zipnize files included src directory.')
+    parser.add_argument('src', type=str, help='source directory path')
+    parser.add_argument('dest', type=str, help='destination directory path')
+    parser.add_argument('filename', type=str, help='zip file name that is going to create')
+    parser.add_argument('-m', '--max-unit', type=int, default=MAX_UNIT,
+                        help='max number of files each divided zipfile contains')
+    args = parser.parse_args()
+
+    if not validate_dir(args.src):
+        raise Exception('"src" is not valid directory')
+    if not validate_dir(args.dest):
+        raise Exception('"dest" is not valid directory')
+
+    smartzip(args.src, args.dest, args.filename, args.max_unit)

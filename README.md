@@ -14,3 +14,9 @@ My util tool for directory operations
 ```
 ./rmerrimg {target directory path}
 ```
+
+- zipnize from large number of files with dividing
+
+```
+./smartzip {src path} {dest path} {filename} [-m MAX_UNIT]
+```
