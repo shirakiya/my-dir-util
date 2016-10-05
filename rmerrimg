@@ -3,7 +3,7 @@
 import argparse
 import os
 from glob import glob
-from lib.validation import validate_dir, validate_empty_image
+from lib.validation import validate_dir, validate_image
 
 EXTENSIONS = [
     'jpg',
@@ -23,7 +23,7 @@ def rm_broken_image(dir):
     import shutil
     i = 0
     for file in get_image_path(dir):
-        if not validate_empty_image(file):
+        if not validate_image(file):
             os.remove(file)
             i += 1
 
