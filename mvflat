@@ -15,18 +15,18 @@ def find_files_recursively(dir):
             yield os.path.join(root, file)
 
 
-def mv_one_level(input_dir, output_dir):
+def mv_one_level(src, dest):
     exists_files = []
 
-    for filepath in find_files_recursively(input_dir):
+    for filepath in find_files_recursively(src):
         filename = os.path.basename(filepath)
-        if os.path.exists(os.path.join(output_dir, filename)):
+        if os.path.exists(os.path.join(dest, filename)):
             exists_files.append(filepath)
             continue
 
-        shutil.move(filepath, output_dir)
+        shutil.move(filepath, dest)
 
-        message = '{0} ===> {1}'.format(filepath, os.path.join(output_dir, os.path.basename(filepath)))
+        message = '{0} ===> {1}'.format(filepath, os.path.join(dest, os.path.basename(filepath)))
         print(message)
 
     print('Already exists files shown below\n')
@@ -35,22 +35,22 @@ def mv_one_level(input_dir, output_dir):
 
 if __name__ == '__main__':
     '''
-    inputで指定されたディレクトリから再帰的にファイルを見つけ,
-    それらをoutputのディレクトリにmvする.
+    srcで指定されたディレクトリから再帰的にファイルを見つけ,
+    それらをdestに指定されたディレクトリにmvする.
     (複雑なディレクトリ構造を持つ状態から1階層にする)
     '''
     parser = argparse.ArgumentParser(description='move files to one level in target directory recursively')
-    parser.add_argument('-i', '--input-dir', type=str, required=True,
-                        help='input directory path')
-    parser.add_argument('-o', '--output-dir', type=str, required=True,
-                        help='output directory path')
+    parser.add_argument('src', type=str,
+                        help='source directory path')
+    parser.add_argument('dest', type=str,
+                        help='destination directory path')
     args = parser.parse_args()
-    input_dir = args.input_dir
-    output_dir = args.output_dir
+    src = args.src
+    dest = args.dest
 
-    if not validate_dir(input_dir):
-        raise Exception('"input_dir" is not valid directory')
-    if not validate_dir(output_dir):
-        raise Exception('"output_dir" is not valid directory')
+    if not validate_dir(src):
+        raise Exception('"src" is not valid directory')
+    if not validate_dir(dest):
+        raise Exception('"dest" is not valid directory')
 
-    mv_one_level(input_dir, output_dir)
+    mv_one_level(src, dest)

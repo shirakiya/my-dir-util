@@ -3,13 +3,13 @@ My util tool for directory operations
 
 
 # Usage
-- move files recursively to output directory as one level.
+- move source files recursively to dest directory as one level.
 
 ```
-./mvflat -i {input directory path} -o {output directory path}
+./mvflat {src path} {dest path}
 ```
 
-- remove empty image files (such as .jpg|.jpeg|.png)
+- remove image files(such as .jpg|.jpeg|.png)
 
 ```
 ./rmerrimg {target directory path}
