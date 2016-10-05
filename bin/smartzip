@@ -26,8 +26,6 @@ def smartzip(src, dest, filename, max_unit):
         index += 1
         print('created: {}'.format(zipfilepath))
 
-    print('finished!')
-
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='zipnize files included src directory.')
