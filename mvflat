@@ -40,17 +40,13 @@ if __name__ == '__main__':
     (複雑なディレクトリ構造を持つ状態から1階層にする)
     '''
     parser = argparse.ArgumentParser(description='move files to one level in target directory recursively')
-    parser.add_argument('src', type=str,
-                        help='source directory path')
-    parser.add_argument('dest', type=str,
-                        help='destination directory path')
+    parser.add_argument('src', type=str, help='source directory path')
+    parser.add_argument('dest', type=str, help='destination directory path')
     args = parser.parse_args()
-    src = args.src
-    dest = args.dest
 
-    if not validate_dir(src):
+    if not validate_dir(args.src):
         raise Exception('"src" is not valid directory')
-    if not validate_dir(dest):
+    if not validate_dir(args.dest):
         raise Exception('"dest" is not valid directory')
 
-    mv_one_level(src, dest)
+    mv_one_level(args.src, args.dest)
