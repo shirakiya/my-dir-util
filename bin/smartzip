@@ -24,7 +24,7 @@ def smartzip(src, dest, filename, max_unit):
             for filepath in chunk_files:
                 zf.write(filepath, os.path.basename(filepath))
         index += 1
-        print('create: {}'.format(zipfilepath))
+        print('created: {}'.format(zipfilepath))
 
     print('finished!')
 
