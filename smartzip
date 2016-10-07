@@ -6,7 +6,7 @@ from glob import glob
 import zipfile
 from lib.validation import validate_dir
 
-MAX_UNIT = 20000
+MAX_UNIT = 10000
 
 
 def _chunk(iterable, n):
