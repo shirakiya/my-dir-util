@@ -20,3 +20,12 @@ My util tool for directory operations
 ```
 ./smartzip {src path} {dest path} {filename} [-m MAX_UNIT]
 ```
+
+
+# Development
+## Set up
+Enable to check coding guideline with [flake8](http://flake8.pycqa.org/en/latest/) at `pre-commit`
+
+```
+$ python hooks/setup.py
+```
