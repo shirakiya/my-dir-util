@@ -1,6 +1,9 @@
 # my-dir-util
 My util tool for directory operations
 
+# Environment
+Python==3.6.1
+
 
 # Usage
 - move source files recursively to dest directory as one level.
